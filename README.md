@@ -1,0 +1,2 @@
+# mlc_llm_docker_run
+使用docker build各种平台的mlc_llm部署大模型
