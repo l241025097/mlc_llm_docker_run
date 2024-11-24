@@ -1,0 +1,38 @@
+# docker build --platform linux/amd64 -t l241025097/mlc_llm:12.3-amd64-dev68 -f Dockerfile.amd64 .
+FROM dockerpull.org/nvidia/cuda:12.3.2-cudnn9-devel-ubuntu22.04
+RUN apt-get clean && apt-get install -y apt-transport-https
+RUN apt-get update && apt-get install -y git
+RUN apt-get install -y wget
+RUN apt-get install -y vim
+RUN apt-get install -y iputils-ping
+RUN apt-get install -y telnet
+RUN apt-get install -y traceroute
+RUN apt-get install -y libterm-readkey-perl
+RUN apt-get install -y locales
+RUN apt-get install -y locales-all && locale-gen en_US.UTF-8
+RUN echo ":set mouse-=a" > ~/.vimrc
+ENV LANG=en_US.UTF-806
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+ENV TZ=Asia/Shanghai
+ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN apt-get install -y tzdata && dpkg-reconfigure --frontend noninteractive tzdata
+RUN apt-get install cron rsyslog -y
+RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6
+RUN apt-get update && apt-get install -y libgl1
+RUN mkdir -p /workspace
+ADD modules.tar.gz /workspace
+# Miniconda3-py312_24.9.2-0-Linux-x86_64.sh
+RUN chmod +x /workspace/modules/Miniconda3-latest-Linux-x86_64.sh
+RUN bash /workspace/modules/Miniconda3-latest-Linux-x86_64.sh -b -u -p /opt/miniconda3
+RUN /opt/miniconda3/bin/conda create -n python3.11 python=3.11
+RUN /opt/miniconda3/bin/conda install -n python3.11 -c conda-forge git-lfs
+RUN /opt/miniconda3/bin/conda install -n python3.11 -c conda-forge libgcc-ng
+RUN /opt/miniconda3/envs/python3.11/bin/python3 -m pip install --upgrade pip
+RUN /opt/miniconda3/envs/python3.11/bin/python3 -m pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+RUN /opt/miniconda3/envs/python3.11/bin/python3 -m pip install /workspace/modules/mlc_ai_nightly_cu123-0.18.dev246-cp311-cp311-manylinux_2_28_x86_64.whl
+RUN /opt/miniconda3/envs/python3.11/bin/python3 -m pip install /workspace/modules/mlc_llm_nightly_cu123-0.18.dev68-cp311-cp311-manylinux_2_28_x86_64.whl
+RUN /opt/miniconda3/bin/conda install -n python3.11 -c conda-forge sentencepiece
+RUN /opt/miniconda3/bin/conda install -n python3.11 -c conda-forge protobuf
+CMD ["/opt/miniconda3/envs/python3.11/bin/mlc_llm", "serve", "/workspace/models/Qwen2.5-7B-Instruct-q0f16-MLC", "--host", "0.0.0.0", "--overrides", "tensor_parallel_shards=2"]
