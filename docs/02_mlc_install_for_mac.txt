@@ -1,0 +1,25 @@
+conda activate mlc_llm_install
+
+# create the conda environment with build dependency
+conda install -n mlc_llm_install -c conda-forge rust
+
+cd /Users/lyn/Documents/python/learn/mlc_llm/modules
+
+# clone from GitHub
+git clone --recursive https://github.com/mlc-ai/mlc-llm.git && cd mlc-llm/
+
+# create build directory
+rm -rf build && mkdir -p build && cd build
+
+# generate build configuration
+# CMakeLists.txt文件所在路径：/Users/lyn/Documents/python/learn/mlc_llm/modules/tvm-unity
+python ../cmake/gen_cmake_config.py
+
+# build mlc_llm libraries
+cmake .. && cmake --build . --parallel $(nproc) && cd ..
+
+conda activate mlc_llm_dev
+
+cd /Users/lyn/Documents/python/learn/mlc_llm/modules/mlc-llm/python
+
+python -m pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple -e .
