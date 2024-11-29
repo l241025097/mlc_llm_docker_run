@@ -1,7 +1,8 @@
-conda activate mlc_llm_install
+conda env remove -n mlc_install
 
 # create the conda environment with build dependency
-conda install -n mlc_llm_install -c conda-forge rust
+conda create -n mlc_install -c conda-forge "cmake>=3.24" rust git python=3.11 -y
+conda activate mlc_install
 
 cd /Users/lyn/Documents/python/learn/mlc_llm/modules
 
@@ -18,7 +19,7 @@ python ../cmake/gen_cmake_config.py
 # build mlc_llm libraries
 cmake .. && cmake --build . --parallel $(nproc) && cd ..
 
-conda activate mlc_llm_dev
+conda activate mlc_llm
 
 cd /Users/lyn/Documents/python/learn/mlc_llm/modules/mlc-llm/python
 

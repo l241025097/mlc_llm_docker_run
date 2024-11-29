@@ -46,12 +46,12 @@ l241025097/mlc_llm:12.3-amd64-dev68 \
 # --overrides "max_num_sequence=32;max_total_seq_length=4096;tensor_parallel_shards=2"
 
 # overrides 参数说明
-# max_num_sequence: 等于max_batch_size，设置KV缓存序列的最大数量
-# max_total_seq_length: 设置所有缓存KV序列的最大长度
+# max_num_sequence: 等于max_batch_size，设置处理KV缓存序列的最大批数
+# max_total_seq_length: 设置最大缓存的KV序列数，影响 KVCache
 # max_single_sequence_length: 设置单个序列的最大长度
 # gpu_memory_utilization: GPU显存使用率，填0~1的小数，默认为0.85
-# context_window_size: 上下文窗口尺寸
-# prefill_chunk_size: 预填充的序列长度
+# context_window_size: 上下文窗口尺寸，影响 KVCache
+# prefill_chunk_size: 设置预填充的序列长度，影响 Temporary buffer
 # tensor_parallel_shards: 张量并行，填GPU数量
 # pipeline_parallel_stages: 流水线并行，填GPU数量
 
@@ -88,5 +88,5 @@ git config --global http.proxy 'socks5h://127.0.0.1:1080'
 git config --global https.proxy 'socks5h://127.0.0.1:1080'
 
 # wheels文件下载地址 https://mlc.ai/wheels
-mlc_ai_nightly_*.whl
-mlc_llm_nightly_*.whl
+mlc_ai_nightly_cu123-0.18.dev246-cp311-cp311-manylinux_2_28_x86_64.whl
+mlc_llm_nightly_cu123-0.18.dev68-cp311-cp311-manylinux_2_28_x86_64.whl

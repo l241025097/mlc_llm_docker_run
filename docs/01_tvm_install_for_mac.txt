@@ -7,17 +7,17 @@ brew install cmake
 brew install zstd
 
 # make sure to start with a fresh environment
-conda env remove -n mlc_llm_install
+conda env remove -n tvm_install
 
 # create the conda environment with build dependency
-conda create -n mlc_llm_install -c conda-forge \
+conda create -n tvm_install -c conda-forge \
     "llvmdev>=15" \
     "cmake>=3.24" \
     git \
     python=3.11
 
 # enter the build environment
-conda activate mlc_llm_install
+conda activate tvm_install
 
 cd /Users/lyn/Documents/python/learn/mlc_llm/modules
 
@@ -50,9 +50,9 @@ echo "set(USE_FLASHINFER OFF)" >> config.cmake
 # Build libtvm using cmake and cmake
 cmake .. && cmake --build . --parallel $(nproc)
 
-conda create -n mlc_llm_dev python=3.11
+conda create -n mlc_llm python=3.11
 
-conda activate mlc_llm_dev
+conda activate mlc_llm
 
 cd /Users/lyn/Documents/python/learn/mlc_llm/modules/tvm-unity/python
 

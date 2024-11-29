@@ -35,4 +35,5 @@ RUN /opt/miniconda3/envs/python3.11/bin/python3 -m pip install /workspace/module
 RUN /opt/miniconda3/envs/python3.11/bin/python3 -m pip install /workspace/modules/mlc_llm_nightly_cu123-0.18.dev68-cp311-cp311-manylinux_2_28_x86_64.whl
 RUN /opt/miniconda3/bin/conda install -n python3.11 -c conda-forge sentencepiece
 RUN /opt/miniconda3/bin/conda install -n python3.11 -c conda-forge protobuf
-CMD ["/opt/miniconda3/envs/python3.11/bin/mlc_llm", "serve", "/workspace/models/Qwen2.5-7B-Instruct-q0f16-MLC", "--host", "0.0.0.0", "--overrides", "tensor_parallel_shards=2"]
+WORKDIR /workspace
+CMD ["/opt/miniconda3/envs/python3.11/bin/mlc_llm", "serve", "mlc-ai/Qwen2.5-0.5B-Instruct-q4f16_1-MLC", "--host", "0.0.0.0", "--mode", "interactive"]
