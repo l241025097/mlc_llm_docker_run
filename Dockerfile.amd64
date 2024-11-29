@@ -16,6 +16,7 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV TZ=Asia/Shanghai
 ENV DEBIAN_FRONTEND=noninteractive
+ENV HF_ENDPOINT=https://hf-mirror.com
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN apt-get install -y tzdata && dpkg-reconfigure --frontend noninteractive tzdata
 RUN apt-get install cron rsyslog -y
